@@ -1,0 +1,62 @@
+{% extends 'bootstrap/base.html'%}
+{% import 'bootstrap/wtf.html' as wtf%}
+{% block head %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+{% endblock %}
+{% block title %}
+	Homepage	
+{% endblock %}
+
+{% block content %}
+	<h3>Welcome {{ fnm }}!</h3><br>
+	
+	{% with msg = get_flashed_messages() %}
+		{% if msg %}
+			<div class="flashes" style="margin-left: 18px">
+				{% for m in msg %}
+				<div class="message_flash">
+					{{ m }}
+				</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endwith%}
+	
+	<button type="button" class="btn btn-primary btn-sm font-weight-bold" style="margin:18px;" data-toggle="modal" data-target="#create_app">Create App</button>
+	
+	<div class="modal" id="create_app" style="max-width: 25rem; margin: auto;">
+		<div class="modal-content" style="margin: auto;">
+			<div class="modal-header">
+				<h3 class="modal-title"> Project Details </h3><br>
+			</div>
+			<div class="modal-body">
+				{{ wtf.quick_form(new_proj, button_map={'submit' : 'primary'}) }}
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fuild">
+		<div class="row" style="margin:10px;">
+			{% for p in projs %}
+				<div class="col">
+					<div class="card border-primary mb-3" style="max-width: 18rem;">
+						<div class="card-header">
+							Project name
+						</div>
+						<div class="card-body text-primary">
+							<p class="card-text mb-2 text-muted">
+								{{ p.description }}
+							</p>
+							<a href="#" class="card-link"> {{ p.src_code_link }}</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	{{ super() }}
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+{% endblock %}

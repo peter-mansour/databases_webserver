@@ -1,0 +1,26 @@
+
+{% import 'bootstrap/wtf.html' as wtf%}
+
+{% block head %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+
+
+{% block title %}
+	Sign Up	
+{% endblock %}
+
+{% block content %}
+	<h3 style="width: 200px; margin: auto"> Sign Up Form </h3><br>
+	<form class="form-group" method="post" style="width: 300px; margin: auto" >
+		{{ wtf.quick_form(form, button_map={'submit' : 'primary'}) }}
+	</form>
+{% endblock %}
+
+{% block script %}
+	{{ super() }}
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+{% endblock %}
+		
+

@@ -1,0 +1,28 @@
+{% extends 'bootstrap/base.html'%}
+{% import 'bootstrap/wtf.html' as wtf%}
+{% block head %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+{% endblock %}
+{% block title %}
+	Login
+{% endblock %}
+
+{% block content %}
+	<h3 style="margin-left: 10px"> Project Managment System (PMS) </h3>
+	{% if err %}
+		<div >
+		<p class="error" style="color: red margin-left: 10px"> <strong>*</strong> {{ err }}
+		</div>
+	{% endif %}
+	<div class="form-group" method="post" style="width: 300px; margin: auto">
+		{{ wtf.quick_form(form, button_map={'submit' : 'primary'}) }}
+	</div>
+{% endblock %}
+
+{% block script %}
+	{{ super() }}
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+{% endblock %}
+
+<!-- {{ wtf.form_field(form.username) }} -->
+		
