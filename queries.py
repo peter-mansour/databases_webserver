@@ -1,5 +1,27 @@
-get_projs="SELECT * FROM Project P WHERE P.owner_id='{uid}'"
-login_owner="SELECT * FROM Person P INNER JOIN Owner O ON P.user_id = \
-O.owner_id WHERE P.username='{unm}' and P.password='{pwd}'"
-login_contrib="SELECT P.user_id FROM Person P INNER JOIN Contributor C ON \
-P.user_id = C. contrib_id WHERE P.username='{unm}' and P.password='{pwd}'"
+get_owner_projs="SELECT * FROM Project P WHERE P.owner_id={uid}"
+get_contrib_projs="SELECT * FROM Contributes C INNER JOIN Project P ON P.proj_id = C.proj_id WHERE C.contrib_id={uid}"
+login_owner="SELECT * FROM Person P INNER JOIN Owner O ON P.user_id = O.owner_id WHERE P.username='{unm}' and P.password='{pwd}'"
+login_contrib="SELECT * FROM Person P INNER JOIN Contributor C ON P.user_id = C. contrib_id WHERE P.username='{unm}' and P.password='{pwd}'"
+add2person="INSERT INTO Person values ('{fnm}', '{lnm}', {uid}, '{email}', '{unm}', '{pwd}', '{credent}', {phone})"
+add2owner="INSERT INTO Owner values('{uid}')"
+add2contrib="INSERT INTO Contributor values('{uid}')"
+get_all_uids="SELECT P.user_id FROM Person P"
+get_all_pids ="SELECT P.proj_id FROM Project P"
+add2proj="INSERT INTO Project values({pid}, {oid}, '{des}', '{src_link}', '{img}', '{nm}')"
+get_progress="SELECT T.proj_id, COUNT(CASE WHEN (T.deadline < CURRENT_DATE AND T.is_complete = 'FALSE') THEN T.task_id END) AS overdue_tasks, \
+COUNT(CASE WHEN T.is_complete = TRUE THEN T.task_id END)*100/COUNT(T.task_id) AS percent_complete FROM TASK T \
+INNER JOIN Project P ON P.proj_id = T.proj_id and P.proj_id = {pid} GROUP BY T.proj_id"
+get_tasks="SELECT * FROM Task T WHERE T.proj_id={pid}"
+get_task_contribs_by_username="SELECT P.username FROM Assigned A INNER JOIN Person P ON P.user_id=A.contrib_id WHERE A.proj_id={pid} and A.task_id={tid}"
+get_proj_contribs_by_id="SELECT C.contrib_id FROM Contributes C WHERE C.proj_id={pid}"
+get_proj_contribs="SELECT P.last_name, P.first_name FROM Contributes C INNER JOIN Person P ON C.contrib_id=P.user_id WHERE C.proj_id={pid}"
+get_task_skills="SELECT R.skill_name FROM requireSkill R WHERE R.proj_id={pid} and R.task_id={tid}"
+get_proj_tids="SELECT T.task_id FROM Task T WHERE T.proj_id={pid}"
+add2task="INSERT INTO Task values({tid}, '{deadline}', '{des}', {pid}, {is_comp}, '{nm}')"
+add2required_skills="INSERT INTO requireSkill values({tid}, {pid}, '{skill}')"
+delete_task="DELETE FROM requireSkill WHERE proj_id={pid} and task_id={tid}; DELETE FROM Assigned WHERE proj_id={pid} and task_id={tid}; \
+DELETE FROM Task WHERE proj_id={pid} and task_id={tid};"
+delete_proj="DELETE FROM requireSkill WHERE proj_id={pid}; DELETE FROM Assigned WHERE proj_id={pid}; \
+DELETE FROM Contributes WHERE proj_id={pid}; DELETE FROM Project WHERE proj_id={pid}"
+add_contributor="INSERT INTO Contributes values({pid}, {cid})"
+get_contrib_by_username="SELECT P.user_id FROM Person P INNER JOIN Contributor C ON P.user_id=C.contrib_id where P.username={unm}"

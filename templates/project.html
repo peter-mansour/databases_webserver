@@ -1,0 +1,108 @@
+{% extends 'bootstrap/base.html'%}
+{% import 'bootstrap/wtf.html' as wtf%}
+{% block head %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+{% endblock %}
+{% block title %}
+	{{ proj.name }}	
+{% endblock %}
+
+{% block content %}
+	<h3 style="margin-left: 18px"> {{ proj.name }} </h3><br>
+	<br />
+	
+	{% if err %}
+		<div >
+		<p class="error" style="color: red; margin-left: 10px;"> <strong>*</strong> {{ err }}
+		</div>
+	{% endif %}
+	
+	<br />
+	{% if owner %}
+	<form class="" method="post" action="">
+		<button type="button" class="btn btn-primary btn-sm font-weight-bold" style="margin-left:18px;" data-toggle="modal" data-target="#add_task">Add Task</button>
+		
+		<div class="modal" id="add_task" style="max-width: 25rem; margin: auto;">
+			<div class="modal-content" style="margin: auto;">
+				<div class="modal-header">
+					<h3 class="modal-title"> Task Details </h3><br>
+				</div>
+				<div class="modal-body">
+					{{ wtf.quick_form(new_task) }}
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary btn-sm font-weight-bold float-right" name="action" value='addtask0'> 
+						Add
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	{% endif %}
+	
+	<hr>
+	<div class="container-fuild">
+		{% for t in tasks %}
+			<div class="card border-primary mb-3 d-inline-block" style="max-height:25rem; margin-left:18px; max-width:18rem;">
+				<div class="card-header clearfix">
+					<div class="card-text float-left"> 
+						{{ t.name }} 
+					</div>
+					{% if owner %}
+					<form id="" action="" method="post">
+						<button type="submit" class="btn btn-danger btn-sm font-weight-bold float-right" name="action" value="deltask{{t.id}}"> 
+							Delete
+						</button>
+					</form>
+					{% endif %}
+				</div>
+				<div class="card-body text-primary">
+					<p class="card-text">
+						Assigned to: {{ t.contributor }}
+					</p>
+					<p class="card-text mb-2 text-muted">
+						{{ t.description }}
+					</p>
+					<p class="card-text text-danger">
+						Due on: {{ t.deadline }}
+					</p>
+					<p class="card-text text-muted">
+						Requires: {{ t.skill }}
+					</p>
+				</div>
+				<div class="card-footer">
+					{% if t.is_complete %}
+						<h6 class="text-success">
+							Completed
+						</h6>
+					{% else %}
+						<h6 class="text-muted">
+							In Progress
+						</h6>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<hr>
+	{% if owner %}
+		<form class="clearfix" method="post" action="">
+			<div class="float-left">
+				{{ wtf.form_field(new_contrib.username) }}
+			</div>	
+			<button type="submit" class="btn btn-primary btn-sm font-weight-bold float-left" style="margin-left: 4px; height: 2.3rem" name="action" value='addcont'> 
+				Add Contributor
+			</button>
+		</form>
+	{% endif %}
+	<hr>
+	<h5 style="margin-left: 18px">Contributors: </h5>
+	{% for c in contribs %}
+		<h6 style="margin-left: 18px">{{c[0]}}, {{c[1]}}</h6>
+	{% endfor %}
+{% endblock %}
+
+{% block script %}
+	{{ super() }}
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+{% endblock %}
