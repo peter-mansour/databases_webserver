@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-	<h3 style="margin-left: 18px">Welcome {{ fnm }}!</h3><br>
+	<h3 style="margin-left: 18px">Welcome {{ user.fnm }}!</h3><br>
 	
 	{% with msg = get_flashed_messages() %}
 		{% if msg %}
@@ -32,7 +32,7 @@
 	</div>
 	
 	<br />
-	{% if owner %}
+	{% if user.perm %}
 		<button type="button" class="btn btn-primary btn-sm font-weight-bold" style="margin-left:18px;" data-toggle="modal" data-target="#create_project">Create Project</button>
 		<form class="modal" id="create_project" method="post" action="" style="max-width: 25rem; margin: auto;">
 			<div class="modal-content" style="margin: auto;">
@@ -46,6 +46,9 @@
 					<button type="submit" class="btn btn-primary btn-sm font-weight-bold float-right" name="action" value='create0'> 
 						Create
 					</button>
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+						Cancel
+					</button>
 				</div>
 			</div>
 		</form>
@@ -53,16 +56,18 @@
 	
 	<hr>
 	<div class="container-fluid">
-		{% for p in projs %}
+		{% for p in user.projs %}
 			<div class="card border-primary mb-3 d-inline-block" style="max-height:20rem; margin-left:5px; max-width:20rem;">
 				<div class="card-header clearfix">
 					<a href="{{url_for('project', id=p.id)}}" class="card-link float-left"> {{ p.name }} </a>
-					{% if owner %}
-					<form id="" action="" method="post">
-						<button type="submit" class="btn btn-danger btn-sm font-weight-bold float-right" name="action" value="delete{{p.id}}"> 
-							Delete
-						</button>
-					</form>
+					{% if user.perm %}	
+						<form method="post" onSubmit="return confirm('Are you sure you want to permanently delete this Project?');">
+							<button type="submit" class="btn btn-danger btn-sm font-weight-bold float-right"> 
+								<input id="csrf_token" name="csrf_token" type="hidden" value="WQRJHQOIWERYJHASDFH"></input>
+								<input name="action" value="delete{{p.id}}" type="hidden"></input>
+								Delete
+							</button>
+						</form>
 					{% endif %}
 				</div>
 				<div class="card-body text-primary">

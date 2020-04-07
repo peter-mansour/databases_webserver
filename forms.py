@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, widgets
 from wtforms_html5 import DateField
 from wtforms import TextAreaField, ValidationError, SelectField
 from wtforms.validators import *
@@ -39,13 +39,12 @@ class SignUp(FlaskForm):
 	phone = StringField('Phone', [is_valid_phone])
 	credent = TextAreaField('Credentials', [Length(min=0, max=CREDENT_SZ, message=MSG_CREDENT_SZ)])
 	role = SelectField('Role', choices=[('1', 'Owner'), ('0', 'Contributor')])
-	submit = SubmitField('Sign Up');
+	submit = SubmitField('Sign Up')
 
 class Login(FlaskForm):
 	username = StringField('Username:', [InputRequired()])
 	password = PasswordField('Password:', [InputRequired()])
 	role = SelectField('Role:', choices=[('1', 'Owner'), ('0', 'Contributor')])
-	submit = SubmitField('Sign In');
 	
 class CreateProj(FlaskForm):
 	NM_SZ = 30
@@ -82,7 +81,7 @@ class AddTask(FlaskForm):
 	deadline = DateField(label='Deadline', format='%Y-%m-%d', validators=[InputRequired(), DateRange(date.today(), None)])
 	skill = StringField('Required Skill', [InputRequired(), Length(min=0, max=SKILL_SZ, message=MSG_SKILL_SZ)])
 
-class AddContrib(FlaskForm):
+class ReqUsername(FlaskForm):
 	UNM_SZ = 50
 	MSG_UNM_SZ = 'Username should not exceed ' + str(UNM_SZ) + ' characters'
 	username = StringField('', [InputRequired(), Length(min=0, max=UNM_SZ, message=MSG_UNM_SZ)], \

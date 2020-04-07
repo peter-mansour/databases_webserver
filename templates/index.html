@@ -8,14 +8,29 @@
 {% endblock %}
 
 {% block content %}
-	<h3 style="margin-left: 10px"> Project Managment System (PMS) </h3>
-	{% if err %}
-		<div >
-		<p class="error" style="color: red; margin-left: 10px;"> <strong>*</strong> {{ err }}
-		</div>
-	{% endif %}
-	<div class="form-group" method="post" style="width: 300px; margin: auto">
-		{{ wtf.quick_form(form, button_map={'submit' : 'primary'}) }}
+    <div style="margin:auto; width:fit-content;">
+		<h3> Project Managment System (PMS) </h3>
+		{% if err %}
+			<div >
+			<p class="error" style="color: red; margin-left: 10px;"> <strong>*</strong> {{ err }}
+			</div>
+		{% endif %}
+		<div class='col-md-offset-3' style="width:18rem; margin:auto">
+			<form class="form-group" method="post" >
+				<div>
+					{{ wtf.quick_form(form) }}
+					<button type="submit" class="btn btn-primary btn-sm font-weight-bold" name="action" value='signin' style='width:18rem'>		
+						Sign In
+					</button>
+				</div>
+			</form>
+			<hr style='width:18rem; margin:left'>
+				<form class="form-group" method="post" >
+					<button type="submit" class="btn btn-success btn-md font-weight-bold" name="action" value='signup' style='width:18rem'>
+						Sign Up
+					</button>
+				</form>
+			</div>
 	</div>
 {% endblock %}
 
