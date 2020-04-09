@@ -28,3 +28,5 @@ get_all_owners="SELECT P.last_name, P.first_name, P.user_id, P.username FROM Per
 assign_task="INSERT INTO Assigned values({tid}, {pid}, {cid})"
 rm_contributor="DELETE FROM Assigned WHERE proj_id={pid} and contrib_id={cid}; DELETE FROM Contributes WHERE proj_id={pid} and contrib_id={cid}"
 update_task_status="UPDATE Task SET is_complete={complete} WHERE task_id={tid} and proj_id={pid}"
+get_projs_by_name="SELECT * FROM project WHERE proj_name ILIKE '%%{name}%%'"
+get_projs_by_skill="SELECT DISTINCT * FROM project p NATURAL JOIN (SELECT proj_id, skill_name FROM requireskill) rs WHERE rs.skill_name ILIKE '%%{skillname}%%'"

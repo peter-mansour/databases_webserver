@@ -62,11 +62,10 @@ class CreateProj(FlaskForm):
 	image = StringField('Image Path', [Length(min=0, max=IMG_SZ, message=MSG_IMG_SZ)])
 
 class SearchBar(FlaskForm):
-	VAL_SZ = 30
-	MSG_VAL_SZ = 'Value should not exceed ' + str(VAL_SZ) + ' characters'
 	
-	search_val = StringField('', [Length(min=0, max=VAL_SZ, message=MSG_VAL_SZ)], render_kw={"placeholder": "Search"})
+	search_val = StringField('', render_kw={"placeholder": "Search"})
 	search_by = SelectField('', choices=[('-1', 'Search by'), ('1', 'Skill name'), ('0', 'Project name')])
+	#submit = SubmitField('Search')
 
 class AddTask(FlaskForm):
 	NM_SZ = 30

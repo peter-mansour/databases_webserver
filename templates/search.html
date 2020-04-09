@@ -1,0 +1,64 @@
+{% extends 'bootstrap/base.html'%}
+{% import 'bootstrap/wtf.html' as wtf%}
+
+{% block head %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+<h3 style="width: 200px; margin: auto"> Searching </h3><br>
+<div class="active-cyan-4 mb-4 d-inline-block" style="margin-left:18px">
+	<form class="form-group" method="post">
+		{{ search_bar.csrf_token }}
+		<div class="float-left" style="width:30rem;">
+			{{ wtf.form_field(search_bar.search_val) }}
+		</div>
+		<div class="float-left" style="max-width:10rem;">
+			{{ wtf.form_field(search_bar.search_by) }}
+		</div>
+		<div class="float-left" style="max-width:10rem;">
+			<button type="submit" class="btn btn-success btn-md font-weight-bold" name="action" style='width:18rem'>
+				Search
+			</button>
+		</div>
+	</form>
+</div>
+{% if projs is defined %}
+<hr>
+<div class="container-fluid">
+	{% for p in projs %}
+	<div class="card border-primary mb-3 d-inline-block" style="max-height:20rem; margin-left:5px; max-width:20rem;">
+		<div class="card-header clearfix">
+			<a class="card-link float-left"> {{ p.name }} </a>
+		</div>
+		<div class="card-body text-primary">
+			<p class="card-text mb-2 text-muted">
+				{{ p.description }}
+			</p>
+			<div class="progress">
+				<div class="progress-bar" role="progressbar" style="width: {{p.progress.percent_complete}}%;">
+					{{ p.progress.percent_complete }}%
+				</div>
+			</div>
+			<div class="card-text text-danger">
+				Overdue Tasks: {{ p.progress.overdue_tasks }}
+			</div>
+			<a href="#" class="card-link"> {{ p.src_code_link }}</a>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+{% endblock %}

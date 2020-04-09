@@ -3,6 +3,7 @@ from flask import g, request
 from sqlalchemy import *
 from queries import *
 import random as rand
+import sys
 
 class Session:
 	client = User()
@@ -14,7 +15,7 @@ class Session:
 		Session.errs.clear()
 
 class FormUtils:
-	
+
 	@staticmethod
 	def load_form_signup():
 		u = User()
@@ -114,6 +115,40 @@ class ProjUtils:
 				row['src_code_link'], row['image_path'], overdue, perc_comp, row['owner_id']))
 		return list
 	
+	@staticmethod
+	def load_projs_by_name(name):
+		projects = []
+		cur = g.conn.execute(get_projs_by_name.format(name=name.lower()))
+		for row in cur:
+			prog_result = g.conn.execute(get_progress.format(pid=int(row['proj_id'])))
+			prog = prog_result.first()
+			if not prog:
+				overdue = 0
+				perc_comp = 0
+			else:
+				overdue = int(prog['overdue_tasks'])
+				perc_comp = int(prog['percent_complete'])
+			projects.append(Project(int(row['proj_id']), row['proj_name'], row['description'], \
+				row['src_code_link'], row['image_path'], overdue, perc_comp, row['owner_id']))
+		return projects
+
+	@staticmethod
+	def load_projs_by_skill(skillname):
+		projects = []
+		cur = g.conn.execute(get_projs_by_skill.format(skillname=skillname))
+		for row in cur:
+			prog_result = g.conn.execute(get_progress.format(pid=int(row['proj_id'])))
+			prog = prog_result.first()
+			if not prog:
+				overdue = 0
+				perc_comp = 0
+			else:
+				overdue = int(prog['overdue_tasks'])
+				perc_comp = int(prog['percent_complete'])
+			projects.append(Project(int(row['proj_id']), row['proj_name'], row['description'], \
+				row['src_code_link'], row['image_path'], overdue, perc_comp, row['owner_id']))
+		return projects
+
 	@staticmethod
 	def get_contribs(pid):
 		list = []

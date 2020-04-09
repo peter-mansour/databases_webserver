@@ -1,4 +1,5 @@
 import os
+import sys
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, redirect, Response, url_for, flash
@@ -49,6 +50,22 @@ def index():
 			return redirect(url_for('signup'))
 	return render_template('index.html', form=form_login, err=err_msg)
 
+@app.route('/search', methods=['Get', 'POST'])
+def search():
+	search_bar = SearchBar()
+	if request.method == 'POST':
+		if search_bar.validate_on_submit():
+			content = request.form.get('search_val')
+			search_type = request.form.get('search_by')
+			print(content, search_type, file=sys.stdout)
+			if search_type == '0':#search project by name
+				projs = ProjUtils.load_projs_by_name(content)
+				return render_template('search.html', search_bar=search_bar, projs=projs)
+			elif search_type == '1':#search project by name of required skill:
+				projs = ProjUtils.load_projs_by_skill(content)
+				return render_template('search.html', search_bar=search_bar, projs=projs)
+			return render_template('search.html', search_bar=search_bar)
+	return render_template('search.html', search_bar=search_bar)
 	
 @app.route('/signup', methods=['Get', 'POST'])
 def signup():
@@ -74,6 +91,7 @@ def homepage():
 			Session.client.projs = ProjUtils.load_projs(Session.client.id, Session.client.perm)
 			flash('Project was successfully deleted', 'error')
 	return render_template('homepage.html', new_proj=new_proj, user=Session.client, search_bar=search_bar)
+
 
 @app.route('/project', methods=['Get', 'POST'])
 def project():
