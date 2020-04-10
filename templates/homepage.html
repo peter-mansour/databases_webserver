@@ -23,12 +23,7 @@
 	{% endwith%}
 	
 	<div class="active-cyan-4 mb-4 d-inline-block" style="margin-left:18px">
-		<div class="float-left" style="width:30rem;">
-			{{ wtf.form_field(search_bar.search_val) }}
-		</div>
-		<div class="float-left" style="max-width:10rem;">
-			{{ wtf.form_field(search_bar.search_by) }}
-		</div>
+		<a href="{{url_for('search')}}" class="card-link float-left"> Search </a>
 	</div>
 	
 	<br />

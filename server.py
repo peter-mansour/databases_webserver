@@ -84,7 +84,6 @@ def signup():
 @app.route('/homepage', methods=['Get', 'POST'])
 def homepage():
 	new_proj = CreateProj()
-	search_bar = SearchBar()
 	if request.method == "POST":
 		action = request.form['action']
 		if action[0:6] == 'create' and new_proj.validate_on_submit():
@@ -95,7 +94,7 @@ def homepage():
 			ProjUtils.remove_proj(int(action[6:]))
 			Session.client.projs = ProjUtils.load_projs(Session.client.id, Session.client.perm)
 			flash('Project was successfully deleted', 'error')
-	return render_template('homepage.html', new_proj=new_proj, user=Session.client, search_bar=search_bar)
+	return render_template('homepage.html', new_proj=new_proj, user=Session.client)
 
 
 @app.route('/project', methods=['Get', 'POST'])
