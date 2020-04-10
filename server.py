@@ -60,11 +60,16 @@ def search():
 			print(content, search_type, file=sys.stdout)
 			if search_type == '0':#search project by name
 				projs = ProjUtils.load_projs_by_name(content)
-				return render_template('search.html', search_bar=search_bar, projs=projs)
 			elif search_type == '1':#search project by name of required skill:
 				projs = ProjUtils.load_projs_by_skill(content)
+			elif search_type == '2': # search user by name
+				users = UserUtils.get_all_contribs_by_name(content)
+			elif search_type == '3': # search user by skill
+				users = UserUtils.get_users_by_skill(content)
+			if search_type in ['2', '3']:
+				return render_template('search.html', search_bar=search_bar, users=users)
+			elif search_type in ['0', '1']:
 				return render_template('search.html', search_bar=search_bar, projs=projs)
-			return render_template('search.html', search_bar=search_bar)
 	return render_template('search.html', search_bar=search_bar)
 	
 @app.route('/signup', methods=['Get', 'POST'])

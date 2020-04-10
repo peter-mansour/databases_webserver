@@ -64,7 +64,7 @@ class CreateProj(FlaskForm):
 class SearchBar(FlaskForm):
 	
 	search_val = StringField('', render_kw={"placeholder": "Search"})
-	search_by = SelectField('', choices=[('-1', 'Search by'), ('1', 'Skill name'), ('0', 'Project name')])
+	search_by = SelectField('', choices=[('-1', 'Search by'), ('1', 'Search Project by Skill'), ('0', 'Search Project Name'), ('2', 'Search Users by Name'), ('3', 'Search Users by Skill')])
 	#submit = SubmitField('Search')
 
 class AddTask(FlaskForm):

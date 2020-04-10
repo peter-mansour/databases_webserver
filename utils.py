@@ -193,7 +193,7 @@ class UserUtils:
 		else:
 			cur = g.conn.execute(login_contrib.format(unm=user.unm, pwd=user.pwd))
 		row = cur.first()
-		if row: 
+		if row:
 			projs = ProjUtils.load_projs(int(row['user_id']), user.perm)
 			return User(row['last_name'], row['first_name'], int(row['user_id']), row['username'], projs,\
 				user.perm, row['password'], row['email'], row['phone_num'], row['credentials'])
@@ -208,6 +208,22 @@ class UserUtils:
 			cur = g.conn.execute(get_all_contribs)
 		for row in cur:
 			users.append(User(row['last_name'], row['first_name'], row['user_id'], row['username'], None, None))
+		return users
+
+	@staticmethod
+	def get_users_by_skill(skillname):
+		users = []
+		cur = g.conn.execute(get_all_person_by_skill.format(skillname=skillname))
+		for row in cur:
+			users.append(User(row['last_name'], row['first_name'], None, row['username'], email=row['email'], phone=row['phone_num']))
+		return users
+
+	@staticmethod
+	def get_all_contribs_by_name(name):
+		users = []
+		cur = g.conn.execute(get_all_contribs_by_name.format(name=name))
+		for row in cur:
+			users.append(User(row['last_name'], row['first_name'], None, row['username'], email=row['email'], phone=row['phone_num']))
 		return users
 
 class TaskUtils:

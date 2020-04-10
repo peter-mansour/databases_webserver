@@ -30,3 +30,5 @@ rm_contributor="DELETE FROM Assigned WHERE proj_id={pid} and contrib_id={cid}; D
 update_task_status="UPDATE Task SET is_complete={complete} WHERE task_id={tid} and proj_id={pid}"
 get_projs_by_name="SELECT * FROM project WHERE proj_name ILIKE '%%{name}%%'"
 get_projs_by_skill="SELECT DISTINCT * FROM project p NATURAL JOIN (SELECT proj_id, skill_name FROM requireskill) rs WHERE rs.skill_name ILIKE '%%{skillname}%%'"
+get_all_contribs_by_name="SELECT DISTINCT P.last_name, P.first_name, P.username, P.email, P.phone_num FROM Person P NATURAL JOIN Contributor C WHERE P.first_name ILIKE '%%{name}%%' OR P.last_name ILIKE '%%{name}%%'"
+get_all_person_by_skill="SELECT DISTINCT P.last_name, P.first_name, P.username, P.email, P.phone_num FROM Person P NATURAL JOIN Requireskill R WHERE R.skill_name ILIKE '%%{skillname}%%'"

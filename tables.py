@@ -46,5 +46,3 @@ class User:
 		self.email = email
 		self.phone = phone
 		self.credent = credent
-
-
