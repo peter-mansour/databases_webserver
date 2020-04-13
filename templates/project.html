@@ -3,7 +3,16 @@
 {% block head %}
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	{% block script %}
+		<script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	{% endblock %}
+
+
 {% endblock %}
+
 {% block title %}
 	{{ proj.name }}	
 {% endblock %}
@@ -50,19 +59,19 @@
 					
 						{% if not t.contributor %}
 							<form class="" method="post" action="">
-								<button type="submit" class="btn btn-primary btn-sm font-weight-bold float-right" data-toggle="modal" data-target="#assign_task" style="margin-right:5px"> 
+								<button id="assign123" value="notetid{{t.id}}" type="submit" class="btn btn-primary btn-sm font-weight-bold float-right" data-toggle="modal" data-target="#assign_task" style="margin-right:5px"> 
 									Assign
 								</button>
 								<div class="modal" id="assign_task" style="max-width: 25rem; margin: auto;">
 									<div class="modal-content" style="margin: auto;">
 										<div class="modal-header">
-											Assign User to task
+											Assign task to User
 										</div>
 										<div class="modal-body">
 											{{ wtf.quick_form(assign_task) }}
 										</div>
 										<div class="modal-footer">
-											<button type="submit" class="btn btn-primary btn-sm font-weight-bold float-right" name="action" value='asstask{{t.id}}' > 
+											<button type="submit" class="btn btn-primary btn-sm font-weight-bold float-right" name="action" value="asstask"> 
 												Assign
 											</button>
 											<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
@@ -94,22 +103,22 @@
 				</div>
 				<div class="card-footer">
 					{% if t.is_complete %}
-						<h6 class="text-success float-left">
+						<h6 class="text-success float-left" style="line-height: inherit;">
 							Completed
 						</h6>
 						<form>
-							<button type="submit" style="padding: 0; border: none; background: none;" formmethod="post">
+							<button type="submit" style="padding: 0; border: none; background: none; margin-left: auto; display: block;" formmethod="post">
 								<i class="fas fa-business-time fa-2x" style="color:orange"></i>
 								<input id="csrf_token" name="csrf_token" type="hidden" value="ZXVCDYBZGRSYRHD"></input>
 								<input name="action" value="altprog{{t.id}}" type="hidden"></input>
 							</button>
 						</form>
 					{% else %}
-						<h6 class="text-muted float-left">
+						<h6 class="text-muted float-left" style="line-height: inherit;">
 							In Progress
 						</h6>
 						<form>
-							<button type="submit" style="padding: 0; border: none; background: none;" formmethod="post">
+							<button type="submit" style="padding: 0; border: none; background: none; margin-left: auto; display: block;" formmethod="post">
 								<i class="fas fa-check fa-2x" style="color:green;"></i>
 								<input id="csrf_token" name="csrf_token" type="hidden" value="MJZDFIYOERNASDFH"></input>
 								<input name="action" value="altcomp{{t.id}}" type="hidden"></input>
@@ -145,20 +154,75 @@
 	{% endif %}
 	<hr>
 	<h5 style="margin-left: 22px">Contributors: </h5>
-	<div style="display:inline-block">
+	<div style="display:inline-block; margin-left: 22px;">
+		{% if owner%}
 		{% for c in contribs %}
-			<h6 style="margin-left: 22px; float:left; margin-right:5px">{{c.lnm}}, {{c.fnm}}</h6>
-				{% if owner%}
-					<form method="post" style="float:left" onSubmit="return confirm('Are you sure you want to permanently remove this Contributor from this project?');">
-						<button type="submit" style="padding: 0; border: none; background: none;">
-							<i class="fas fa-user-times" style="color:red"></i>
-							<input id="csrf_token" name="csrf_token" type="hidden" value="MNZXCIVUYAOIJHMZCXFHSDF"></input>
-							<input name="action" value="rmcontr{{c.id}}" type="hidden"></input>
-						</button>
-					</form>
-				{% endif %}
-			<br>
+			<div style="display: flex;">
+				<div style="margin-right: 20px">
+					{% if ratings[c.id]/2 > 0 %}
+						<i class="fas fa-star" style="color:orange"></i>
+					{% else %}
+						<i class="far fa-star"></i>
+					{% endif %}
+					{% if ratings[c.id]/2 > 1 %}
+						<i class="fas fa-star" style="color:orange"></i>
+					{% else %}
+						<i class="far fa-star"></i>
+					{% endif %}
+					{% if ratings[c.id]/2 > 2 %}
+						<i class="fas fa-star" style="color:orange"></i>
+					{% else %}
+						<i class="far fa-star"></i>
+					{% endif %}
+					{% if ratings[c.id]/2 > 3 %}
+						<i class="fas fa-star" style="color:orange"></i>
+					{% else %}
+						<i class="far fa-star"></i>
+					{% endif %}
+					{% if ratings[c.id]/2 > 4 %}
+						<i class="fas fa-star" style="color:orange"></i>
+					{% else %}
+						<i class="far fa-star"></i>
+					{% endif %}
+				</div>
+				<h6 style="margin-right: 20px; line-height: inherit;">{{c.lnm}}, {{c.fnm}}</h6>
+				<form method="post" style="float:left; " onSubmit="return confirm('Are you sure you want to permanently remove this Contributor from this project?');">
+					<button type="submit" style="padding: 0; border: none; background: none; margin-right: 20px;">
+						<i class="fas fa-user-times" style="color:red"></i>
+						<input id="csrf_token" name="csrf_token" type="hidden" value="MNZXCIVUYAOIJHMZCXFHSDF"></input>
+						<input name="action" value="rmcontr{{c.id}}" type="hidden"></input>
+					</button>
+				</form>
+				<form method="post"> 
+					<button type="submit" id="pick_contrib" style="padding: 0; border: none; background: none;"  data-toggle="modal" data-target="#eval_contrib_form" value="notecid{{c.id}}">
+						<i class="fab fa-wpforms"></i>
+						<input id="csrf_token" name="csrf_token" type="hidden" value="MZXNLAKSDHFLKJERUIY"></input>
+						<input name="action" value="notecid{{c.id}}" type="hidden"></input>
+					</button>
+					
+					<div class="modal" id="eval_contrib_form" style="max-width: 25rem; margin: auto;">
+						<div class="modal-content" style="margin: auto;">
+							<div class="modal-header">
+								Contributor Evaluation Form
+							</div>
+							<div class="modal-body">
+								{{ wtf.quick_form(rate_contrib) }}
+							</div>
+							<div class="modal-footer">
+								<button type="submit" id="evalcon" class="btn btn-primary btn-sm font-weight-bold float-right" name="action" value="evalcon"> 
+									Submit
+								</button>
+								<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+									Cancel
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
 		{% endfor %}
+			<br>
+		{% endif %}
 	</div>
 	{% if owner %}
 		<form class="clearfix" method="post" action="">
@@ -172,9 +236,30 @@
 			</div>
 		</form>
 	{% endif %}
-{% endblock %}
-
-{% block script %}
-	{{ super() }}
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	
+		<script>
+			$(document).ready(function() {
+				$("#assign123").click(function(e) {
+					$.ajax({
+						type: "POST",
+						url: window.location.pathname,
+						data: {
+							action: $("#assign123").val()
+						}
+					});
+				});
+			});
+			
+			$(document).ready(function() {
+				$("#pick_contrib").click(function(e) {
+					$.ajax({
+						type: "POST",
+						url: window.location.pathname,
+						data: {
+							action: $("#pick_contrib").val()
+						}
+					});
+				});
+			});
+		</script>
 {% endblock %}

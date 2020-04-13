@@ -8,6 +8,7 @@ from flask_bootstrap import Bootstrap
 from tables import *
 import click
 from utils import *
+import sys
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -105,10 +106,14 @@ def project():
 	add_contrib = ReqUsername()
 	new_task = AddTask()
 	assign_task = ReqUsername()
+	rate_contrib = Rate()
 	
 	if request.method == 'POST':
 		Session.refresh()
 		action = request.form['action']
+		print(action)
+		print(request)
+		print(request.form, flush=True)
 		if action[0:7] == 'deltask':
 			TaskUtils.remove_task(Session.current_pid, int(action[7:]))
 			flash("Task was successfully removed from project!", 'error')
@@ -123,24 +128,29 @@ def project():
 			elif status == 0:
 				Session.errs.append("Username does not exist")		
 		elif action[0:7] == 'asstask' and assign_task.validate_on_submit():
-			if not TaskUtils.assign(Session.current_pid, int(action[7:]), FormUtils.load_form_username()):
+			if not TaskUtils.assign(Session.current_pid, Session.current_tid, FormUtils.load_form_username()):
 				Session.errs.append("User must be a contributor to the project to be assigned a task")
 			else:
 				flash("User was successfully assigned to the task")
 		elif action[0:7] == 'rmcontr':
 			ProjUtils.remove_contrib(Session.current_pid, int(action[7:]))
-			print(int(action[7:]))
 			flash("Contributor was successfully removed from project!", 'error')
 		elif action[0:7] == 'altcomp':
 			TaskUtils.update_status(Session.current_pid, int(action[7:]), True)
 		elif action[0:7] == 'altprog':
 			TaskUtils.update_status(Session.current_pid, int(action[7:]), False)
+		elif action[0:7] == 'notetid':
+			Session.current_tid = int(action[7:])
+		elif action[0:7] == 'notecid':
+			Session.current_cid = int(action[7:])
+			EvalUtils.add_eval(FormUtils.load_form_evaluation(), Session.client.id, Session.current_cid)
 		return redirect(url_for('project'))
-			
+	
 	return render_template('project.html', new_task=new_task, err=Session.errs, \
 		contribs=ProjUtils.get_contribs(Session.current_pid), \
+		ratings=UserUtils.get_all_contrib_rating(ProjUtils.get_contribs(Session.current_pid)), \
 		proj=ProjUtils.get_proj(Session.current_pid, Session.client.projs), \
-		tasks=TaskUtils.load_tasks(Session.current_pid), \
+		tasks=TaskUtils.load_tasks(Session.current_pid), rate_contrib=rate_contrib, \
 		owner=Session.client.perm, add_contrib=add_contrib, assign_task=assign_task)
 
 if __name__ == "__main__":

@@ -46,3 +46,11 @@ class User:
 		self.email = email
 		self.phone = phone
 		self.credent = credent
+
+class Eval:
+	def __init__(self, cid=None, oid=None, score=None, id=None, cmnt=None):
+		self.id = id
+		self.cid = cid
+		self.oid = oid
+		self.score = score
+		self.cmnt = cmnt

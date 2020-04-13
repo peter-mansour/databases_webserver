@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, widgets
+from wtforms import StringField, PasswordField, SubmitField, widgets, RadioField
 from wtforms_html5 import DateField
 from wtforms import TextAreaField, ValidationError, SelectField
 from wtforms.validators import *
@@ -65,7 +65,6 @@ class SearchBar(FlaskForm):
 	
 	search_val = StringField('', render_kw={"placeholder": "Search"})
 	search_by = SelectField('', choices=[('-1', 'Search by'), ('1', 'Search Project by Skill'), ('0', 'Search Project Name'), ('2', 'Search Users by Name'), ('3', 'Search Users by Skill')])
-	#submit = SubmitField('Search')
 
 class AddTask(FlaskForm):
 	NM_SZ = 30
@@ -85,3 +84,9 @@ class ReqUsername(FlaskForm):
 	MSG_UNM_SZ = 'Username should not exceed ' + str(UNM_SZ) + ' characters'
 	username = StringField('', [InputRequired(), Length(min=0, max=UNM_SZ, message=MSG_UNM_SZ)], \
 		render_kw={"placeholder":"Username", "style":"width:15rem; margin-left:18px; display: inline-block;"})
+
+class Rate(FlaskForm):
+	CMNT_SZ = 500
+	MSG_CMNT_SZ = 'Comment should not exceed ' + str(CMNT_SZ) + ' characters'
+	score = RadioField('Rating', validators=[InputRequired()], choices=[('1', '1-Star'), ('2', '2-Star'),('3', '3-Star'),('4', '4-Star'), ('5', '5-Star')])
+	comment = TextAreaField('Comment', validators=[InputRequired(), Length(min=0, max=CMNT_SZ, message=MSG_CMNT_SZ)])

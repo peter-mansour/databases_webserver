@@ -8,6 +8,8 @@ import sys
 class Session:
 	client = User()
 	current_pid = None
+	current_tid = None
+	current_cid = None
 	errs = []
 	
 	@staticmethod
@@ -59,6 +61,17 @@ class FormUtils:
 		u.pwd = request.form.get('password')
 		u.perm = int(request.form.get('role'))
 		return u
+	
+	@staticmethod
+	def load_form_evaluation():
+		e = Eval()
+		score = request.form.get('score')
+		comment = request.form.get('comment')
+		if score == '':
+			e.score = None
+		e.cmnt = None if comment == '' else comment
+		e.score = None if score == '' else score
+		return e
 
 class ProjUtils:
 	__MIN_PID = 1
@@ -225,7 +238,44 @@ class UserUtils:
 		for row in cur:
 			users.append(User(row['last_name'], row['first_name'], None, row['username'], email=row['email'], phone=row['phone_num']))
 		return users
+	
+	@staticmethod
+	def get_all_contrib_rating(contribs):
+		ratings = {}
+		for c in contribs:
+			cur = g.conn.execute(get_rating.format(cid=c.id))
+			row = cur.first()
+			if row:
+				ratings[row['contrib_id']] = row['avg_rating']
+			else:
+				ratings[c.id] = 0
+		return ratings
+		
 
+class EvalUtils:
+	__MIN_EID = 0
+	__MAX_EID = 999999999999
+	
+	@staticmethod
+	def get_all_eval_id():
+		list = []
+		all_ids = g.conn.execute(get_eval_ids)
+		for id in all_ids:
+			list.append(id['eval_id'])
+		return list
+	
+	@staticmethod
+	def add_eval(e, oid, cid):
+		e.id = gen_id(EvalUtils.__MIN_EID, EvalUtils.__MAX_EID, EvalUtils.get_all_eval_id())
+		comment = 'NULL'
+		score = 0
+		if e.cmnt:
+			comment = e.cmnt
+		if e.score:
+			score = e.score
+		if e.cmnt or e.score:
+			g.conn.execute(eval_contrib.format(oid=oid, cid=cid, eid=e.id, cmnt=comment, score=score))
+		
 class TaskUtils:
 	__MIN_TID = 1
 	__MAX_TID = 99
