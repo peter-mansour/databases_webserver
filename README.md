@@ -13,5 +13,5 @@ You will need to pip install:
  - flask-bootstrap==3.3.7.1
 
 To run the webserver:<br/>
-   python3 server.py [options] [HOST] [PORT]<br/>
-   python3 server.py --debug 127.0.0.1 5000
+   `python3 server.py [options] [HOST] [PORT]`<br/>
+   `python3 server.py --debug 127.0.0.1 5000`
