@@ -43,7 +43,7 @@ the original hasSkill table, where each user_id corresponds to an array of skill
 
 ##### Query 3: An owner wants to check how much a user's skill set has in common with skills required for project's tasks i.e. if the user is a good match for the project. The value is a ratio between 0 and 100% where 100% is a perfect match.
 	SELECT C.contrib_id, 
-	&nbsp;&nbsp;&nbsp;&nbsp;COUNT(CASE WHEN R.skill_name = ANY(H.skills) THEN R.skill_name END)*100/COUNT(*) AS match
+		COUNT(CASE WHEN R.skill_name = ANY(H.skills) THEN R.skill_name END)*100/COUNT(*) AS percent_match
 	FROM Task T
 	INNER JOIN Contributes C
 	ON C.proj_id = T.proj_id and T.proj_id = 9 and C.contrib_id = 935
@@ -53,7 +53,7 @@ the original hasSkill table, where each user_id corresponds to an array of skill
 	ON H.user_id = C.contrib_id
 	GROUP BY C.contrib_id;
 
-| contrib_id | match |
+| contrib_id | percent_match |
 |------------|-------|
 | 935        | 19    |
 
