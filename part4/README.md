@@ -3,6 +3,36 @@ Zejun Lin (zl2844)
 
 PostgreSQL Account: phm2122  
 
+### Text Option
+
+Since users might want to search a project by its description -- searching by project name only works when you know specifically which project you want to participate in and searching by required skills also might not be sufficient sometimes. Therefore, I change the date type of `project.description` from `varchar(500)` to text. PostgreSQL provides two data types that are designed to support full text search, which is the activity of searching through a collection of natural-language *documents* to locate those that best match a *query*. The `tsvector` type represents a document in a form optimized for text search; the `tsquery` type similarly represents a text query.
+
+#### Queries:
+
+##### Query 1: find `proj_id` and `name` of all projects whose description contains keyword `speech-to-text`.
+
+```sql
+select proj_id, proj_name from project where to_tsvector(description) @@ to_tsquery('vjvv');
+```
+
+| proj_id | proj_name               |
+| ------- | ----------------------- |
+| 1       | Expert Recruiter System |
+
+##### Query 2: find `proj_id`, `src_code_link`, `proj_name` of all projects whose description contains keywords `CNNs` and `python` and `tensor`.
+
+```sql
+select proj_id, src_code_link, proj_name from project where to_tsvector(description) @@ to_tsquery('CNNs & python & tensor');
+```
+
+| proj_id | src_code_link    | proj_name          |
+| ------- | ---------------- | ------------------ |
+| 18      | www.columbia.edu | speech recognition |
+
+
+
+
+
 ### Array Option:
 
 Since a user may have multiple skills, I created a table hasSkills to replace
