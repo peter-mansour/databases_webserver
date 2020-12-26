@@ -16,7 +16,7 @@ app.config['SECRET_KEY'] = os.urandom(64)
 Bootstrap(app)
 
 rand.seed(1)
-DATABASEURI = "postgresql://phm2122:9813@35.231.103.173/proj1part2"
+DATABASEURI = "postgres://jnynlffb:WrwDx8S1AyIOImLWFE8cdTqYiQRYPLiV@ruby.db.elephantsql.com:5432/jnynlffb"
 engine = create_engine(DATABASEURI)
 
 @app.before_request
@@ -157,8 +157,8 @@ if __name__ == "__main__":
 	@click.command()
 	@click.option('--debug', is_flag=True)
 	@click.option('--threaded', is_flag=True)
-	@click.argument('host', default='127.0.0.1')
-	@click.argument('port', default=8111, type=int)
+	@click.argument('host', default='0.0.0.0')
+	@click.argument('port', default=80, type=int)
 	def run(debug, threaded, host, port):
 		print("running on %s:%d" % (host, port))
 		app.run(host=host, port=port, debug=debug, threaded=threaded)

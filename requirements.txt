@@ -1,7 +1,8 @@
 sqlalchemy
 wtforms==2.2.1
-wtforms-html5==0.13
+wtforms-html5==0.1.3
 flask-wtf
 phonenumbers
 flask
 flask-bootstrap
+psycopg2-binary
